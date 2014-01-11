@@ -27,6 +27,7 @@ test('array globs', function (t) {
 });
 
 test('no auto-index for non-functions', function (t) {
+    t.plan(3);
     var res = bulk(__dirname + '/non', [ '**/*.js' ]);
     t.deepEqual(res.bar, { x: 'xxx' });
     t.deepEqual(res.foo.index, { one: 'beep', two: 'boop' });

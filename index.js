@@ -26,10 +26,12 @@ module.exports = function (root, globs, bounds) {
     
     function walk (node) {
         if (typeof node === 'object') {
+            var init = typeof node.index === 'string' && require(node.index);
+            
             return Object.keys(node).reduce(function (acc, key) {
                 acc[key] = walk(node[key]);
                 return acc;
-            }, typeof node.index === 'string' ? require(node.index) : {});
+            }, init && typeof init === 'function' ? init : {});
         }
         else return require(node);
     }
