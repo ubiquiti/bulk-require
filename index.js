@@ -1,19 +1,31 @@
 var glob = require('glob');
 var path = require('path');
 
-module.exports = function (root, globs, bounds) {
+module.exports = function (root, globs) {
     if (typeof globs === 'string') globs = [ globs ];
     if (!Array.isArray(globs)) return {};
-    var xglobs = globs.map(function (g) { return path.resolve(root, g) });
+    var xglobs = globs.map(function (g) {
+        if (Array.isArray(g)) {
+            return [ path.resolve(root, g[0]) ].concat(g.slice(1));
+        }
+        return path.resolve(root, g)
+    });
     
     return walk(xglobs.reduce(function (acc, g) {
+        var args = [];
+        if (Array.isArray(g)) {
+            args = g.slice(1);
+            g = g[0];
+        }
         var ex = glob.sync(g);
+        
         ex.forEach(function (file) {
             var keys = keyOf(file);
             for (var node = acc, i = 0; i < keys.length; i++) {
                 var key = keys[i];
                 if (i === keys.length - 1) {
-                    node[keys[i]] = file;
+                    if (!node[key]) node[key] = [ file ];
+                    node[key].push.apply(node[key], args);
                 }
                 else {
                     if (!node[key]) node[key] = {};
@@ -25,15 +37,41 @@ module.exports = function (root, globs, bounds) {
     }, {}));
     
     function walk (node) {
-        if (typeof node === 'object') {
-            var init = typeof node.index === 'string' && require(node.index);
+        if (Array.isArray(node)) {
+            var exp = require(node[0]);
+            var args = node.slice(1);
+            if (args.length === 0) return exp;
+            var mapF = function (f) {
+                if (typeof f !== 'function') return f;
+                return function () {
+                    var args_ = args.concat([].slice.call(arguments));
+                    return f.apply(this, args_);
+                };
+            };
+            
+            if (typeof exp === 'function') {
+                return mapF(exp);
+            }
+            else if (Array.isArray(exp)) {
+                return exp.map(mapF);
+            }
+            else if (exp && typeof exp === 'object') {
+                return Object.keys(exp).reduce(function (acc, key) {
+                    acc[key] = mapF(exp[key]);
+                    return acc;
+                }, {});
+            }
+            else return exp;
+        }
+        else if (typeof node === 'object') {
+            var init = node.index && typeof node.index[0] === 'string'
+                && require(node.index[0]);
             
             return Object.keys(node).reduce(function (acc, key) {
                 acc[key] = walk(node[key]);
                 return acc;
             }, init && typeof init === 'function' ? init : {});
         }
-        else return require(node);
     }
     
     function keyOf (file) {
