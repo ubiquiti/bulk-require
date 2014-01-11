@@ -25,3 +25,13 @@ test('array globs', function (t) {
     t.equal(res.data.dogs.small.yip(3), 333);
     t.equal(res.data.dogs.wolf.doge, 'wow');
 });
+
+test('no auto-index for non-functions', function (t) {
+    var res = bulk(__dirname + '/non', [ '**/*.js' ]);
+    t.deepEqual(res.bar, { x: 'xxx' });
+    t.deepEqual(res.foo.index, { one: 'beep', two: 'boop' });
+    t.deepEqual(res.foo, {
+        index: { one: 'beep', two: 'boop' },
+        robot: '-_-'
+    });
+});
