@@ -1,5 +1,6 @@
 # freight
 
-Freight is a system to help you compartmentalize your frontend into reusable
-containers that render on both the backend and the frontend.
+Freight is a system to help you compartmentalize your backend code, passing
+arguments in bulk to matching files.
+
 
