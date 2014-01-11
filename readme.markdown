@@ -69,6 +69,10 @@ Return a nested object `modules` by expanding the string or array of strings
 Each file will be placed into the nested tree `modules` based on its filename
 with respect to `basedir`. Each directory becomes a new nested object.
 
+If there is an `index.js` module that exports a single function with
+`module.exports=`, all the sub-modules will be attached to the index reference
+and it will serve as the parent node at that tree level. 
+
 # install
 
 With [npm](https://npmjs.org) do:
