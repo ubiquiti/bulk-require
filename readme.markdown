@@ -90,7 +90,7 @@ modules may be justified, but most of the time you should just use the regular
 kind of require.
 
 What you should absolutely never do is run this module from somewhere deep in
-your codebase. It should be very close to the entry point of your 
+your codebase. It should be very close to the entry point of your application.
 
 Sometimes it's OK to break the rules. Especially if you can get away with it.
 Caveat npmtor.
