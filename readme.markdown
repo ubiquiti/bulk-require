@@ -1,6 +1,6 @@
 # bulk-require
 
-require whole directory trees in bulk
+require a whole directory of trees in bulk
 
 [![build status](https://secure.travis-ci.org/substack/bulk-require.png)](http://travis-ci.org/substack/bulk-require)
 
