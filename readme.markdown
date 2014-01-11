@@ -1,6 +1,7 @@
 # bulk-require
 
-require whole directories in bulk
+require whole directory trees in bulk
+
 
 # example
 
