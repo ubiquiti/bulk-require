@@ -4,11 +4,11 @@ var path = require('path');
 module.exports = function (root, globs, bounds) {
     if (typeof globs === 'string') globs = [ globs ];
     if (!Array.isArray(globs)) return {};
+    var xglobs = globs.map(function (g) { return path.resolve(root, g) });
     
-    return walk(globs.reduce(function (acc, g) {
+    return walk(xglobs.reduce(function (acc, g) {
         var ex = glob.sync(g);
-        ex.forEach(function (rel) {
-            var file = path.join(root, rel);
+        ex.forEach(function (file) {
             var keys = keyOf(file);
             for (var node = acc, i = 0; i < keys.length; i++) {
                 var key = keys[i];
