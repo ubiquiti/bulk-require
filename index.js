@@ -1,9 +1,12 @@
 var glob = require('glob');
 var path = require('path');
 
-module.exports = function (root, globs) {
+module.exports = function (root, globs, opts) {
     if (typeof globs === 'string') globs = [ globs ];
     if (!Array.isArray(globs)) return {};
+    if (!opts) opts = {};
+    var requireFn = opts.require || require;
+    
     var xglobs = globs.map(function (g) {
         if (Array.isArray(g)) {
             return [ path.resolve(root, g[0]) ].concat(g.slice(1));
@@ -38,7 +41,7 @@ module.exports = function (root, globs) {
     
     function walk (node) {
         if (Array.isArray(node)) {
-            var exp = require(node[0]);
+            var exp = requireFn(node[0]);
             var args = node.slice(1);
             if (args.length === 0) return exp;
             var mapF = function (f) {
@@ -65,7 +68,7 @@ module.exports = function (root, globs) {
         }
         else if (typeof node === 'object') {
             var init = node.index && typeof node.index[0] === 'string'
-                && require(node.index[0]);
+                && requireFn(node.index[0]);
             
             return Object.keys(node).reduce(function (acc, key) {
                 acc[key] = walk(node[key]);
