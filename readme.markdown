@@ -101,7 +101,7 @@ Caveat npmtor.
 var bulk = require('bulk-require')
 ```
 
-## var modules = bulk(basedir, globs)
+## var modules = bulk(basedir, globs, opts={})
 
 Return a nested object `modules` by expanding the string or array of strings
 `globs` rooted at the directory `basedir`.
@@ -116,6 +116,8 @@ bound to all the top-level function exports for files matching the glob pattern.
 If there is an `index.js` module that exports a single function with
 `module.exports=`, all the sub-modules will be attached to the index reference
 and it will serve as the parent node at that tree level. 
+
+You can optionally pass in a custom `require` function with `opts.require`.
 
 # install
 
