@@ -1,6 +1,6 @@
 {
   "name": "bulk-require",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "require a whole directory of trees in bulk",
   "main": "index.js",
   "dependencies": {
