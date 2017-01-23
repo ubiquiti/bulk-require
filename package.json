@@ -1,6 +1,6 @@
 {
-  "name": "bulk-require",
-  "version": "1.0.0",
+  "name": "@ubnt/bulk-require",
+  "version": "2.0.0",
   "description": "require a whole directory of trees in bulk",
   "main": "index.js",
   "dependencies": {
